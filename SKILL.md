@@ -97,10 +97,12 @@ Write `plan.json` (anywhere; it gets copied into the plan dir):
 
 Then:
 ```bash
-python3 SKILL_DIR/scripts/build_plan.py plan.json
+python3 SKILL_DIR/scripts/build_plan.py plan.json [--publish ~/tennis/<date>]
 ```
 This renders `training_plan.md` + self-contained `training_plan.html` (phase
 timeline, weekly tables, exit-criteria callouts) into the player's plans directory.
+The plans directory lives under a hidden dot-folder — pass `--publish DIR` to also
+copy the deliverables into a user-visible folder when the user wants them findable.
 
 ### 5. Deliver
 

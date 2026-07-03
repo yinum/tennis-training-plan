@@ -83,6 +83,8 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("plan_json")
     ap.add_argument("--outdir", default=None)
+    ap.add_argument("--publish", default=None, metavar="DIR",
+                    help="also copy training_plan.html/.md into DIR (a user-visible folder)")
     args = ap.parse_args()
 
     src = Path(args.plan_json).expanduser().resolve()
@@ -192,8 +194,17 @@ def main():
         out_html = out_html.replace("{{%s}}" % k, v or "")
     (outdir / "training_plan.html").write_text(out_html)
 
+    published = None
+    if args.publish:
+        pub = Path(args.publish).expanduser()
+        pub.mkdir(parents=True, exist_ok=True)
+        for f in ("training_plan.html", "training_plan.md"):
+            (pub / f).write_bytes((outdir / f).read_bytes())
+        published = str(pub)
+
     print(json.dumps({"plan_md": str(outdir / "training_plan.md"),
                       "plan_html": str(outdir / "training_plan.html"),
+                      "published_to": published,
                       "weeks": total_weeks, "phases": len(mesos)}, indent=2))
 
 

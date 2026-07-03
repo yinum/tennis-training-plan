@@ -1,0 +1,23 @@
+{
+  "skill_name": "tennis-training-plan",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "you analyzed my tennis video last week — now make me a training plan. I can practice twice a week, 90 minutes, I have a hitting partner and a wall at my gym. Name's Yi.",
+      "expected_output": "Reads latest report from ~/.tennis-analysis/players/yi/, interviews for remaining constraints (injuries, goal), builds 8-12 week periodized plan.json, renders training_plan.md + .html with phases, weekly tables, exit criteria, re-assessment loop.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I'm about a 3.0 player, no video analysis yet. my serve is terrible and I get tired running around. give me a realistic practice schedule for 3 months, 3x a week",
+      "expected_output": "Fallback mode: offers video analysis first; on decline interviews self-description, builds plan flagged as self-description-based, realistic expectations per progression table.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "my 10-week plan is done, i did most of it. what now?",
+      "expected_output": "Directs to re-assessment: record new video, re-run tennis-video-analysis, compare radar/trend, then build next macrocycle from the new report's gates.",
+      "files": []
+    }
+  ]
+}

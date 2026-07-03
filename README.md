@@ -22,13 +22,22 @@ harness that can run CLI scripts.
 
 ## Install
 
+macOS / Linux:
+
 ```bash
 git clone https://github.com/yinum/tennis-training-plan ~/.agents/skills/tennis-training-plan
 ln -s ~/.agents/skills/tennis-training-plan ~/.claude/skills/tennis-training-plan   # Claude Code
 ln -s ~/.agents/skills/tennis-training-plan ~/.codex/skills/tennis-training-plan    # Codex
 ```
 
-No setup script — stdlib Python only. Plans are filed under
+Windows (PowerShell):
+
+```powershell
+git clone https://github.com/yinum/tennis-training-plan "$env:USERPROFILE\.claude\skills\tennis-training-plan"
+```
+
+No setup script — stdlib Python only (any Python 3.10+; use `python` instead of
+`python3` on Windows). Plans are filed under
 `~/.tennis-analysis/players/<name>/plans/` so both skills share one player timeline.
 
 Then ask your agent: *"make me a training plan from my tennis report"*.

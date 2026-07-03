@@ -119,6 +119,8 @@ overlay + NTRP trend in the next report).
 - Injuries: substitute drills, cap volumes, and say when something needs a
   physio/coach rather than a plan.
 
-## Codex / non-Claude harnesses
+## Codex / non-Claude harnesses / Windows
 
-Plain bash + python3 (stdlib only) — no harness-specific tools required.
+Plain python3 (stdlib only) — no harness-specific tools required. On Windows use
+`python` instead of `python3`; paths under `~/.tennis-analysis` resolve to
+`%USERPROFILE%\.tennis-analysis` automatically.

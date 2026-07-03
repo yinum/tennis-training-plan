@@ -89,7 +89,7 @@ def main():
 
     src = Path(args.plan_json).expanduser().resolve()
     try:
-        p = json.loads(src.read_text())
+        p = json.loads(src.read_text(encoding="utf-8"))
     except Exception as e:
         sys.exit(f"ERROR: cannot parse {src}: {e}")
     missing = [k for k in REQUIRED if k not in p]
@@ -140,10 +140,10 @@ def main():
     md += ["", "## Re-assessment",
            f"Week {ra.get('cadence_weeks', total_weeks)}: {ra.get('method', 'record a new video and re-run tennis-video-analysis')}"]
     md += ["", "## Constraints & safety"] + [f"- {c}" for c in p["caveats"]]
-    (outdir / "training_plan.md").write_text("\n".join(md))
+    (outdir / "training_plan.md").write_text("\n".join(md), encoding="utf-8")
 
     # ---------- html ----------
-    tpl = TEMPLATE.read_text()
+    tpl = TEMPLATE.read_text(encoding="utf-8")
     meso_cards = ""
     for m in mesos:
         rows = ""
@@ -192,7 +192,7 @@ def main():
     out_html = tpl
     for k, v in subs.items():
         out_html = out_html.replace("{{%s}}" % k, v or "")
-    (outdir / "training_plan.html").write_text(out_html)
+    (outdir / "training_plan.html").write_text(out_html, encoding="utf-8")
 
     published = None
     if args.publish:

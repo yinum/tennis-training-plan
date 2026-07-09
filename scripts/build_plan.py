@@ -85,6 +85,8 @@ def main():
     ap.add_argument("--outdir", default=None)
     ap.add_argument("--publish", default=None, metavar="DIR",
                     help="also copy training_plan.html/.md into DIR (a user-visible folder)")
+    ap.add_argument("--no-study-videos", action="store_true",
+                    help="allow building a legacy plan.json that predates the study_videos key")
     args = ap.parse_args()
 
     src = Path(args.plan_json).expanduser().resolve()
@@ -95,6 +97,10 @@ def main():
     missing = [k for k in REQUIRED if k not in p]
     if missing:
         sys.exit(f"ERROR: plan.json missing keys: {missing} (schema in SKILL.md)")
+    if not p.get("study_videos") and not args.no_study_videos:
+        sys.exit("ERROR: plan.json has no 'study_videos' (recommended learning videos matched to the "
+                 "plan's focus areas — schema and sourcing rules in SKILL.md step 3). "
+                 "Only for legacy plans, pass --no-study-videos.")
 
     outdir = Path(args.outdir) if args.outdir else \
         TENNIS_HOME / "players" / slugify(p["player"]) / "plans" / p["date"]
@@ -139,6 +145,13 @@ def main():
     ra = p["reassessment"]
     md += ["", "## Re-assessment",
            f"Week {ra.get('cadence_weeks', total_weeks)}: {ra.get('method', 'record a new video and re-run tennis-video-analysis')}"]
+    svids = p.get("study_videos") or []
+    if svids:
+        md += ["", "## Recommended study videos"]
+        for v in svids:
+            label = (f"[{v.get('title', 'video')}]({v['url']})" if v.get("url")
+                     else f"search: “{v.get('title', '')}”")
+            md += [f"- **{v.get('focus', '')}** — {label} ({v.get('platform', 'web')}) — {v.get('why', '')}"]
     md += ["", "## Constraints & safety"] + [f"- {c}" for c in p["caveats"]]
     (outdir / "training_plan.md").write_text("\n".join(md), encoding="utf-8")
 
@@ -170,6 +183,18 @@ def main():
                f"<ul>{exits}</ul></div>" if exits else "")
             + "</div>")
 
+    study_card = ""
+    if svids:
+        items = ""
+        for v in svids:
+            title = html.escape(str(v.get("title", "video")))
+            link = (f"<a href='{html.escape(str(v['url']), quote=True)}' target='_blank' rel='noopener'>{title}</a>"
+                    if v.get("url") else f"search: &ldquo;{title}&rdquo;")
+            items += (f"<li><strong>{html.escape(str(v.get('focus', '')))}</strong> — {link} "
+                      f"<span class='pill'>{html.escape(str(v.get('platform', 'web')))}</span>"
+                      f"<div class='metric'>{html.escape(str(v.get('why', '')))}</div></li>")
+        study_card = f"<div class='card'><h2>Recommended study videos</h2><ul>{items}</ul></div>"
+
     subs = {
         "PLAYER": html.escape(p["player"]), "DATE": p["date"],
         "SOURCE": html.escape(str(p.get("source_report", "described level"))),
@@ -188,6 +213,7 @@ def main():
         "REASSESS_HTML": md_lite(f"**Week {ra.get('cadence_weeks', total_weeks)}:** "
                                  f"{ra.get('method', 'record a new video and re-run tennis-video-analysis')}"),
         "CAVEATS_HTML": "<ul>" + "".join(f"<li>{html.escape(c)}</li>" for c in p["caveats"]) + "</ul>",
+        "STUDY_VIDEOS_CARD": study_card,
     }
     out_html = tpl
     for k, v in subs.items():

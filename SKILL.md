@@ -91,9 +91,30 @@ Write `plan.json` (anywhere; it gets copied into the plan dir):
   "progression_rules": ["advance on criteria, not calendar", "..."],
   "reassessment": {"cadence_weeks": 10,
                    "method": "record 20+ min, same camera angle, re-run tennis-video-analysis"},
+  "study_videos": [{"focus": "names the focus area / gate it serves",
+                    "title": "video title from the search result — or the exact search phrase when url is null",
+                    "url": "https://... or null", "platform": "youtube | bilibili",
+                    "why": "one line: what to watch for, tied to this player's gate"}],
   "caveats": ["shoulder history: serve volume halved, band work before serve days", "..."]
 }
 ```
+
+**study_videos (required, 1–2 per focus area, 3–6 total).** Pro slow-motion for the
+pattern each gate is chasing, drill tutorials for the phase-1 drills. Sourcing rules:
+
+- A `url` may only come from a web search you ran **this session** (WebSearch or
+  equivalent). Never write a video URL from memory — remembered video IDs are
+  almost always dead links. No search tool in this harness → set `"url": null`
+  and put the exact search phrase in `title`; the plan renders it as a suggested
+  search.
+- Query patterns that work: YouTube `"<pro> <stroke> slow motion"`,
+  `"tennis <drill name> drill"`; Bilibili `site:bilibili.com 网球 <技术> 慢动作/教学`.
+  Reliable YouTube channels for slow-motion pro technique: Be Gr8 at Tennis,
+  Top Tennis Training, Feel Tennis, Essential Tennis.
+- Search Bilibili as well as YouTube; include a Bilibili entry whenever a relevant
+  result exists (many players prefer Chinese-language instruction — ask if unsure).
+- Match videos to the source report's pro comparisons when it has them (e.g. a
+  Sinner-pattern forehand gate → Sinner slow-motion, not a random pro).
 
 Then:
 ```bash
